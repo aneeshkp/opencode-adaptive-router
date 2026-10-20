@@ -1,0 +1,61 @@
+{
+  "generatedAt": "2026-10-20T15:09:29.432Z",
+  "datasetSize": 80,
+  "classAccuracy": {
+    "overall": 1,
+    "perClass": {
+      "chat": 1,
+      "explain": 1,
+      "docs": 1,
+      "review": 1,
+      "ops": 1,
+      "code_write": 1,
+      "debug": 1,
+      "refactor": 1,
+      "test": 1,
+      "architecture": 1
+    }
+  },
+  "tierAccuracy": {
+    "overall": 1,
+    "perTier": {
+      "cheap": 1,
+      "balanced": 1,
+      "powerful": 1
+    }
+  },
+  "latencyMs": {
+    "p50": 0.021786000000020067,
+    "p95": 0.07429200000001401,
+    "max": 1.0512559999999667,
+    "samples": 2000
+  },
+  "costSimulation": {
+    "unit": "USD per 1000 turns",
+    "systemTokensPerTurn": 4000,
+    "tierPrices": {
+      "cheap": {
+        "model": "openai/gpt-6-luna",
+        "input": 0.1,
+        "output": 0.5
+      },
+      "balanced": {
+        "model": "openai/gpt-5.6-terra",
+        "input": 2,
+        "output": 12
+      },
+      "powerful": {
+        "model": "openai/gpt-6.1-sol",
+        "input": 2,
+        "output": 10
+      }
+    },
+    "strategies": {
+      "alwaysCheap": 78.42080000000004,
+      "alwaysBalanced": 1752.2959999999998,
+      "alwaysPowerful": 1568.4160000000004,
+      "adaptiveRouter": 1365.0351
+    }
+  },
+  "disagreements": []
+}

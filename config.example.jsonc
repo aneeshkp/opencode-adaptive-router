@@ -1,0 +1,83 @@
+/**
+ * Example OpenCode configuration for the adaptive router.
+ *
+ * Copy the `plugins` entry into your project's `opencode.jsonc` (or the
+ * matching global config) and adjust the package path and model ids.
+ * Every option is optional — this file shows a fully-pinned setup.
+ *
+ * IMPORTANT: register the plugin here OR via a `.opencode/plugins/`
+ * symlink — never both. Both at once loads it twice under the same id
+ * and two engines will fight over one session.
+ */
+{
+  // Optional: your usual model default. The router switches per turn.
+  "model": "openai/gpt-5.6-terra",
+
+  "plugins": [
+    {
+      "package": "/absolute/path/to/opencode-adaptive-router",
+      "options": {
+        // "auto" switches models per turn; "advisory" only logs decisions.
+        "mode": "auto",
+
+        // Skip subagent (child) sessions; recommended.
+        "routePrimaryOnly": true,
+
+        // A manual /models switch disables routing for that session.
+        "respectManualSelection": true,
+
+        // Pin explicit candidates per tier ("provider/model"). Pinning makes
+        // routing deterministic and the telemetry readable. Without it the
+        // router buckets the live catalog by blended $/Mtok.
+        "tiers": {
+          "pinned": {
+            "cheap": ["openai/gpt-6-luna"],
+            "balanced": ["openai/gpt-5.6-terra"],
+            "powerful": ["openai/gpt-6.1-sol"]
+          }
+          // "cheapMaxBlendedUsd": 1.5,
+          // "balancedMaxBlendedUsd": 8
+        },
+
+        // Task classes floored at the balanced tier: cheap models are for
+        // discovery and conversation, execution stays mid-tier.
+        // "minBalancedClasses": ["architecture", "code_write", "debug", "refactor", "test"],
+
+        // Map a complexity band onto a different tier, e.g. route complex
+        // work to balanced because your balanced model is very strong:
+        // "bandTierOverride": { "complex": "balanced" },
+
+        "policy": {
+          // Hard cap on output $/Mtok for any routed model.
+          // "maxOutputCostPerMTok": 60,
+          // "allow": ["openai/gpt-6-luna", "openai/gpt-5.6-terra"],
+          // "deny": ["acme/legacy-model"],
+          // "preferCurrentProvider": true,
+          // "contextSafetyFactor": 1.25,
+          // "outputReserveTokens": 8192,
+          // "allowStatuses": ["active", "beta"],
+          // "registryTtlMs": 300000
+        },
+
+        "escalation": {
+          // On provider failure, escalate one tier and accept one retry.
+          // "enabled": true,
+          // "maxHops": 1,
+          // "retryDelayMs": 500
+        },
+
+        "budget": {
+          // Past these, the router degrades to the cheapest model that fits.
+          // "sessionMaxUsd": 10,
+          // "dailyMaxUsd": 50
+        },
+
+        "telemetry": {
+          // "retain": 400,
+          // "promptPreviewChars": 120,   // 0 disables prompt previews
+          // "persistDebounceMs": 2000
+        }
+      }
+    }
+  ]
+}
